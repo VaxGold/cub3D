@@ -48,17 +48,17 @@ int worldMap [COLS][ROWS] =
 };
 
 //------------------------------------ INIT ------------------------------------//
-void    game_init(t_all *gdat)
+void    game_init(t_data *gd)
 {
     printf("Loading window...\n");
-    gdat->game.screen_w = 600;
-    gdat->game.screen_h = 600;
-    gdat->game.mlx = mlx_init();
-    gdat->game.win = mlx_new_window(gdat->game.mlx, gdat->game.screen_w, gdat->game.screen_h, "cubTestD");
+    gd->game.scrW = 600;
+    gd->game.scrH = 600;
+    gd->game.mlx = mlx_init();
+    gd->game.win = mlx_new_window(gd->game.mlx, gd->game.scrW, gd->game.scrH, "cubTestD");
     printf("Window loaded!\n");
     printf("Inicializating image...\n");
-    gdat->game.img.img_ptr = mlx_new_image(gdat->game.mlx, gdat->game.screen_w, gdat->game.screen_h);
-    gdat->game.img.data = (int *)mlx_get_data_addr(gdat->game.img.img_ptr, &gdat->game.img.bpp, &gdat->game.img.size_l, &gdat->game.img.endian);
+    gd->game.img.img_ptr = mlx_new_image(gd->game.mlx, gd->game.scrW, gd->game.scrH);
+    gd->game.img.data = (int *)mlx_get_data_addr(gd->game.img.img_ptr, &gd->game.img.bpp, &gd->game.img.size_l, &gd->game.img.endian);
     printf("Image prepared!\n");
 }
 
@@ -68,6 +68,15 @@ double angle_laps(double a)
 
     laps = (int)a % 360;
     return(a - 360 * laps);
+}
+
+double  inverse_angle(double a)
+{
+    if (a < 0)
+    {
+        a += 360;
+    }
+    return(a);
 }
 
 double  rad_to_deg(double n)
@@ -84,9 +93,9 @@ double  rad_to_deg(double n)
     return (res);
 }
 //------------------------------------ KEY_HOOK ------------------------------------//
-int     key_press(int key_code, t_all *gdat)
+int     key_press(int key_code, t_data *gd)
 {
-    //double frameTime = (gdat->game.time - gdat->game.oldTime) / 1000;
+    //double frameTime = (gd->game.time - gd->game.oldTime) / 1000;
     printf("KEYCODE ----> %d\n", key_code);
     
     if (key_code == KEY_ESC)
@@ -96,78 +105,78 @@ int     key_press(int key_code, t_all *gdat)
     }
     else if (key_code == KEY_W)
     {
-        gdat->player.move.fb = 1;
+        gd->player.mvFb = 1;
     }
     else if (key_code == KEY_S)
     {
-        gdat->player.move.fb = -1;
+        gd->player.mvFb = -1;
     }
     else if (key_code == KEY_A)
     {
-        gdat->player.move.rot = 1;
+        gd->player.mvRot = 1;
     }
     else if (key_code == KEY_D)
     {
-        gdat->player.move.rot = -1;
+        gd->player.mvRot = -1;
     }
     else if (key_code == KEY_Q)
     {
-        gdat->player.move.rl = -1;
+        gd->player.mvSide = -1;
     }
     else if (key_code == KEY_E)
     {
-        gdat->player.move.rl = 1;
+        gd->player.mvSide = 1;
     }
     else if (key_code == KEY_TAB)
     {
         printf("---------------- INFORMATION ----------------\n");
-        printf("dirX----> %f, dirY----> %f\n", gdat->player.dirX, gdat->player.dirY);
-        printf("ANGLE-----> %f\n", atan(gdat->player.dirX / gdat->player.dirY));
+        printf("dirX----> %f, dirY----> %f\n", gd->player.dirX, gd->player.dirY);
+        printf("ANGLE-----> %f\n", inverse_angle(atan2(gd->player.dirX, gd->player.dirY) * 180 / M_PI));
     }
     
     return(0);
 }
 
-int     key_release(int key_code, t_all *gdat)
+int     key_release(int key_code, t_data *gd)
 {
     if (key_code == KEY_W)
     {
-        gdat->player.move.fb = 0;
+        gd->player.mvFb = 0;
     }
     else if (key_code == KEY_S)
     {
-        gdat->player.move.fb = 0;
+        gd->player.mvFb = 0;
     }
     else if (key_code == KEY_A)
     {
-        gdat->player.move.rot = 0;
+        gd->player.mvRot = 0;
     }
     else if (key_code == KEY_D)
     {
-        gdat->player.move.rot = 0;
+        gd->player.mvRot = 0;
     }
     else if (key_code == KEY_Q)
     {
-        gdat->player.move.rl = 0;
+        gd->player.mvSide = 0;
     }
     else if (key_code == KEY_E)
     {
-        gdat->player.move.rl = 0;
+        gd->player.mvSide = 0;
     }
     return(0);
 }
 
 //------------------------------------ CLEAR SCREEN ------------------------------------//
-void    clear_screen(t_all *gdat)
+void    clear_screen(t_data *gd)
 {
     int i = 0;
     int j = 0;
-    while (i <= gdat->game.screen_w)
+    while (i <= gd->game.scrW)
     {
         j = 0;
-        while (j <= gdat->game.screen_h)
+        while (j <= gd->game.scrH)
         {
-            gdat->game.img.data[j * gdat->game.screen_w + i] = 0;
+            gd->game.img.data[j * gd->game.scrW + i] = 0;
             j++;
         }
         i++;
@@ -176,57 +185,57 @@ void    clear_screen(t_all *gdat)
 
 //------------------------------------ LOOP ------------------------------------//
 
-void    ft_movement(t_all *gdat)
+void    ft_movement(t_data *gd)
 {
     //ROTATION
-    double oldDirX = gdat->player.dirX;
-    gdat->player.dirX = gdat->player.dirX * cos(gdat->player.move.rot * ROTSPEED) - gdat->player.dirY * sin(gdat->player.move.rot * ROTSPEED);
-    gdat->player.dirY = oldDirX * sin(gdat->player.move.rot * ROTSPEED) + gdat->player.dirY * cos(gdat->player.move.rot * ROTSPEED);
-    double oldPlaneX = gdat->player.planeX;
-    gdat->player.planeX = gdat->player.planeX * cos(gdat->player.move.rot * ROTSPEED) - gdat->player.planeY * sin(gdat->player.move.rot * ROTSPEED);
-    gdat->player.planeY = oldPlaneX * sin(gdat->player.move.rot * ROTSPEED) + gdat->player.planeY * cos(gdat->player.move.rot * ROTSPEED);
+    double oldDirX = gd->player.dirX;
+    gd->player.dirX = gd->player.dirX * cos(gd->player.mvRot * ROTSPEED) - gd->player.dirY * sin(gd->player.mvRot * ROTSPEED);
+    gd->player.dirY = oldDirX * sin(gd->player.mvRot * ROTSPEED) + gd->player.dirY * cos(gd->player.mvRot * ROTSPEED);
+    double oldPlaneX = gd->ray.planeX;
+    gd->ray.planeX = gd->ray.planeX * cos(gd->player.mvRot * ROTSPEED) - gd->ray.planeY * sin(gd->player.mvRot * ROTSPEED);
+    gd->ray.planeY = oldPlaneX * sin(gd->player.mvRot * ROTSPEED) + gd->ray.planeY * cos(gd->player.mvRot * ROTSPEED);
 
     //MOVEMENT
 
-    /*if(gdat->player.move.rl != 0 && gdat->player.move.fb != 0)
+    /*if(gd->playermvSide != 0 && gd->playermvFb != 0)
     {
         //Straight Movement
-        if(worldMap[(int)(gdat->player.posX + gdat->player.move.fb * gdat->player.dirX * MOVSPEED)][(int)gdat->player.posY] == 0)
-        gdat->player.posX = gdat->player.posX + gdat->player.move.fb * (gdat->player.dirX * MOVSPEED);
+        if(worldMap[(int)(gd->player.posX + gd->playermvFb * gd->player.dirX * MOVSPEED)][(int)gd->player.posY] == 0)
+        gd->player.posX = gd->player.posX + gd->playermvFb * (gd->player.dirX * MOVSPEED);
         //Side Movement
-        if(worldMap[(int)gdat->player.posX][(int)(gdat->player.posY + gdat->player.move.fb * gdat->player.dirY * MOVSPEED)] == 0)
-        gdat->player.posY = gdat->player.posY + gdat->player.move.fb * (gdat->player.dirY * MOVSPEED);
+        if(worldMap[(int)gd->player.posX][(int)(gd->player.posY + gd->playermvFb * gd->player.dirY * MOVSPEED)] == 0)
+        gd->player.posY = gd->player.posY + gd->playermvFb * (gd->player.dirY * MOVSPEED);
     }
     else
     {
-        if(worldMap[(int)(gdat->player.posX + gdat->player.move.fb * gdat->player.dirX * MOVSPEED)][(int)gdat->player.posY] == 0)
-        gdat->player.posX = gdat->player.posX + gdat->player.move.fb * (gdat->player.dirX * MOVSPEED);
+        if(worldMap[(int)(gd->player.posX + gd->playermvFb * gd->player.dirX * MOVSPEED)][(int)gd->player.posY] == 0)
+        gd->player.posX = gd->player.posX + gd->playermvFb * (gd->player.dirX * MOVSPEED);
     }*/
     
-    if(worldMap[(int)(gdat->player.posX + gdat->player.move.fb * gdat->player.dirX * MOVSPEED)][(int)gdat->player.posY] == 0)
-        gdat->player.posX = gdat->player.posX + gdat->player.move.fb * (gdat->player.dirX * MOVSPEED);
-    if(worldMap[(int)gdat->player.posX][(int)(gdat->player.posY + gdat->player.move.fb * gdat->player.dirY * MOVSPEED)] == 0)
-        gdat->player.posY = gdat->player.posY + gdat->player.move.fb * (gdat->player.dirY * MOVSPEED);
+    if(worldMap[(int)(gd->player.posX + gd->player.mvFb * gd->player.dirX * MOVSPEED)][(int)gd->player.posY] == 0)
+        gd->player.posX = gd->player.posX + gd->player.mvFb * (gd->player.dirX * MOVSPEED);
+    if(worldMap[(int)gd->player.posX][(int)(gd->player.posY + gd->player.mvFb * gd->player.dirY * MOVSPEED)] == 0)
+        gd->player.posY = gd->player.posY + gd->player.mvFb * (gd->player.dirY * MOVSPEED);
 
-    if(worldMap[(int)(gdat->player.posX + gdat->player.move.fb * gdat->player.dirX * MOVSPEED)][(int)gdat->player.posY] == 0)
-        gdat->player.posX = gdat->player.posX + gdat->player.move.fb * (gdat->player.dirX * MOVSPEED);
-    if(worldMap[(int)gdat->player.posX][(int)(gdat->player.posY + gdat->player.move.fb * gdat->player.dirY * MOVSPEED)] == 0)
-        gdat->player.posY = gdat->player.posY + gdat->player.move.fb * (gdat->player.dirY * MOVSPEED);
+    if(worldMap[(int)(gd->player.posX + gd->player.mvFb * gd->player.dirX * MOVSPEED)][(int)gd->player.posY] == 0)
+        gd->player.posX = gd->player.posX + gd->player.mvFb * (gd->player.dirX * MOVSPEED);
+    if(worldMap[(int)gd->player.posX][(int)(gd->player.posY + gd->player.mvFb * gd->player.dirY * MOVSPEED)] == 0)
+        gd->player.posY = gd->player.posY + gd->player.mvFb * (gd->player.dirY * MOVSPEED);
 }
-int     main_loop(t_all *gdat)
+int     main_loop(t_data *gd)
 {
     int x = 0;
 
-    ft_movement(gdat);
-    clear_screen(gdat);
-    while (x < gdat->game.screen_w)
+    ft_movement(gd);
+    clear_screen(gd);
+    while (x < gd->game.scrW)
     {
-        double cameraX = 2 * x / (double) gdat->game.screen_w - 1;
-        double rayDirX = gdat->player.dirX + gdat->player.planeX * cameraX;
-		double rayDirY = gdat->player.dirY + gdat->player.planeY * cameraX;
+        double cameraX = 2 * x / (double) gd->game.scrW - 1;
+        double rayDirX = gd->player.dirX + gd->ray.planeX * cameraX;
+		double rayDirY = gd->player.dirY + gd->ray.planeY * cameraX;
 
-        int mapX = (int)gdat->player.posX;
-		int mapY = (int)gdat->player.posY;
+        int mapX = (int)gd->player.posX;
+		int mapY = (int)gd->player.posY;
 
         double sideDistX;
 		double sideDistY;
@@ -243,22 +252,22 @@ int     main_loop(t_all *gdat)
         if (rayDirX < 0)
 		{
 			stepX = -1;
-        	sideDistX = (gdat->player.posX - mapX) * deltaDistX;
+        	sideDistX = (gd->player.posX - mapX) * deltaDistX;
 		}
 		else
 		{
 			stepX = 1;
-       		sideDistX = (mapX + 1.0 - gdat->player.posX) * deltaDistX;
+       		sideDistX = (mapX + 1.0 - gd->player.posX) * deltaDistX;
 		}
 		if (rayDirY < 0)
 		{
 			stepY = -1;
-        	sideDistY = (gdat->player.posY - mapY) * deltaDistY;
+        	sideDistY = (gd->player.posY - mapY) * deltaDistY;
 		}
 		else
 		{
 			stepY = 1;
-        	sideDistY = (mapY + 1.0 - gdat->player.posY) * deltaDistY;
+        	sideDistY = (mapY + 1.0 - gd->player.posY) * deltaDistY;
 		}
 
         while (hit == 0)
@@ -280,18 +289,18 @@ int     main_loop(t_all *gdat)
 		}
 
         if (side == 0)
-			perpWallDist = (mapX - gdat->player.posX + (1- stepX) / 2) / rayDirX;
+			perpWallDist = (mapX - gd->player.posX + (1- stepX) / 2) / rayDirX;
 		else
-			perpWallDist = (mapY - gdat->player.posY + (1- stepY) / 2) / rayDirY;
+			perpWallDist = (mapY - gd->player.posY + (1- stepY) / 2) / rayDirY;
 		
-		int lineHeight = (int) (gdat->game.screen_h / perpWallDist);
+		int lineHeight = (int) (gd->game.scrH / perpWallDist);
 
-		int drawStart = -lineHeight / 2 + gdat->game.screen_h / 2;
+		int drawStart = -lineHeight / 2 + gd->game.scrH / 2;
 		if (drawStart < 0)
 			drawStart = 0;
-		int drawEnd = lineHeight / 2 + gdat->game.screen_h / 2;
-		if (drawEnd >= gdat->game.screen_h)
-			drawEnd = gdat->game.screen_h - 1;
+		int drawEnd = lineHeight / 2 + gd->game.scrH / 2;
+		if (drawEnd >= gd->game.scrH)
+			drawEnd = gd->game.scrH - 1;
 
         int rgb;
 		if (worldMap[mapX][mapY] == 1)
@@ -310,43 +319,42 @@ int     main_loop(t_all *gdat)
         int pix = 0;
         while (pix < drawStart)
         {
-            gdat->game.img.data[pix * gdat->game.screen_w + x] = 0x02AFC4;
+            gd->game.img.data[pix * gd->game.scrW + x] = 0x02AFC4;
             pix++;
         }
         while (drawStart <= drawEnd)
 		{
-			gdat->game.img.data[drawStart * gdat->game.screen_w + x] = rgb;
+			gd->game.img.data[drawStart * gd->game.scrW + x] = rgb;
 			drawStart++;
 		}
-        while (drawEnd <= gdat->game.screen_h)
+        while (drawEnd <= gd->game.scrH)
         {
-            gdat->game.img.data[drawEnd * gdat->game.screen_w + x] = 0x386E39;
+            gd->game.img.data[drawEnd * gd->game.scrW + x] = 0x386E39;
             drawEnd++;
         }
 		x++;
     }
-    mlx_put_image_to_window(gdat->game.mlx, gdat->game.win, gdat->game.img.img_ptr, 0, 0);
+    mlx_put_image_to_window(gd->game.mlx, gd->game.win, gd->game.img.img_ptr, 0, 0);
     return(0);
 }
 
 //------------------------------------ MAIN ------------------------------------//
 int     main()
 {
-    t_all gdat;
+    t_data gd;
 
-    gdat.player.posX = 22, gdat.player.posY = 12;
-	gdat.player.dirX = -1, gdat.player.dirY = 0;
-	gdat.player.planeX = 0, gdat.player.planeY = 0.66;
-    gdat.game.time = 0, gdat.game.oldTime = 0;
+    gd.player.posX = 22, gd.player.posY = 12;
+	gd.player.dirX = -1, gd.player.dirY = 0;
+	gd.ray.planeX = 0, gd.ray.planeY = 0.66;
 
     printf("Starting game...\n");
-    game_init(&gdat);
+    game_init(&gd);
     printf("Game loaded!\n");
     
-    //mlx_key_hook(gdat.game.win, &deal_key, &gdat);
-    mlx_hook(gdat.game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gdat);
-    mlx_hook(gdat.game.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gdat);
-    mlx_loop_hook(gdat.game.mlx, &main_loop, &gdat);
-    mlx_loop(gdat.game.mlx);
+    //mlx_key_hook(gd.game.win, &deal_key, &gd);
+    mlx_hook(gd.game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
+    mlx_hook(gd.game.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
+    mlx_loop_hook(gd.game.mlx, &main_loop, &gd);
+    mlx_loop(gd.game.mlx);
     return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/09 20:43:45 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/11 20:31:19 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,17 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef struct	s_move
-{
-	double	fb;
-	double	rl;
-	double	rot;
-}				t_move;
-
 typedef struct	s_player
 {
 	double	posX;
 	double	posY;
 	double	dirX;
 	double	dirY;
-	double	planeX;
-	double	planeY;
-	t_move	move;
+	double	mvFb;
+	double	mvSide;
+	double	mvRot;
+	double	rotSpd;
+	double	mvSpd;
 }				t_player;
 
 typedef struct	s_img
@@ -58,31 +53,34 @@ typedef struct	s_game
 {
 	void    *mlx;
 	void    *win;
-	int     screen_w;
-	int     screen_h;
+	int     scrW;
+	int     scrH;
 	t_img	img;
 	int		**map;
-	double	time;
-	double	oldTime;
 }				t_game;
 
-typedef struct	s_tiles
+typedef struct	s_ray
 {
-	int		width;
-	int		heigth;
-	t_img	img;
-}				t_tiles;
+	double	planeX;
+	double	planeY;
+	double	dirX;
+	double	dirY;
+	double	sideDistX;
+	double	sideDistY;
+	double deltaDistX;
+	double deltaDistY;
+	double	stepX;
+	double	stepY;
+	int		hit;
+	int		side;
+}				t_ray;
 
-/*typedef struct	s_raycast
+typedef struct		s_data
 {
-	
-}				t_raycast;*/
-
-typedef struct		s_all
-{
-	t_game game;
-	t_player player;
-}					t_all;
+	t_game		game;
+	t_player	player;
+	t_ray		ray;
+}					t_data;
 
 
 #endif
