@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/11 20:31:19 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/12 20:20:33 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,29 @@
 
 //# include "libft"
 
-# define TRUE 1
-# define FALSE 0
+# define TRUE					1
+# define FALSE					0
+
+# define X_EVENT_KEY_PRESS		2
+# define X_EVENT_KEY_RELEASE	3
+# define X_EVENT_KEY_EXIT		17
+
+# define KEY_ESC				53
+# define KEY_W					13
+# define KEY_A					0
+# define KEY_S					1
+# define KEY_D					2
+# define KEY_Q	    			12
+# define KEY_E					14
+# define KEY_A_LEFT	    		123
+# define KEY_A_RIGHT			124
+# define KEY_TAB				47
+
+# define COLS					24
+# define ROWS					24
+# define TILE_SIZE				50
+# define MOVSPEED               0.2
+# define ROTSPEED               0.1
 
 typedef struct	s_player
 {
@@ -33,16 +54,20 @@ typedef struct	s_player
 	double	posY;
 	double	dirX;
 	double	dirY;
-	double	mvFb;
-	double	mvSide;
-	double	mvRot;
-	double	rotSpd;
-	double	mvSpd;
+	double	planeX;
+	double	planeY;
 }				t_player;
+
+typedef struct	s_controls
+{
+	double	x;
+	double	y;
+	double	rot;
+}				t_controls;
 
 typedef struct	s_img
 {
-	void		*img_ptr;
+	void		*ptr;
 	int			*data;
 	int			size_l;
 	int			bpp;
@@ -61,14 +86,12 @@ typedef struct	s_game
 
 typedef struct	s_ray
 {
-	double	planeX;
-	double	planeY;
 	double	dirX;
 	double	dirY;
 	double	sideDistX;
 	double	sideDistY;
-	double deltaDistX;
-	double deltaDistY;
+	double	deltaDistX;
+	double	deltaDistY;
 	double	stepX;
 	double	stepY;
 	int		hit;
@@ -78,8 +101,8 @@ typedef struct	s_ray
 typedef struct		s_data
 {
 	t_game		game;
-	t_player	player;
-	t_ray		ray;
+	t_player	actor;
+	t_controls	axis;
 }					t_data;
 
 
