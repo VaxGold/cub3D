@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/12 20:20:33 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/15 20:37:04 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define KEY_E					14
 # define KEY_A_LEFT	    		123
 # define KEY_A_RIGHT			124
-# define KEY_TAB				47
+# define KEY_TAB				48
 
 # define COLS					24
 # define ROWS					24

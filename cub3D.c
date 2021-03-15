@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:08:06 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/12 21:09:42 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/15 21:11:34 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,23 +92,25 @@ int     key_press(int key_code, t_data *gd)
     else if (key_code == KEY_TAB)
     {
         printf("---------------->| INFORMATION |<----------------\n");
+        printf("dirX---> %f, dirY---> %f\n", gd->actor.dirX, gd->actor.dirY);
     }
+    printf("AXIS(x, y): %f, %f\n", gd->axis.x, gd->axis.y);
     return(0);
 }
 
 int     key_release(int key_code, t_data *gd)
 {
-    if (key_code == KEY_W)
+    if (key_code == KEY_W && gd->axis.x == 1)
         gd->axis.x= 0;
-    else if (key_code == KEY_S)
+    else if (key_code == KEY_S && gd->axis.x == -1)
         gd->axis.x = 0;
-    else if (key_code == KEY_A_LEFT)
+    else if (key_code == KEY_A_LEFT && gd->axis.rot == 1)
         gd->axis.rot = 0;
-    else if (key_code == KEY_A_RIGHT)
+    else if (key_code == KEY_A_RIGHT && gd->axis.rot == -1)
         gd->axis.rot = 0;
-    else if (key_code == KEY_A)
+    else if (key_code == KEY_A && gd->axis.y == 1)
         gd->axis.y = 0;
-    else if (key_code == KEY_D)
+    else if (key_code == KEY_D && gd->axis.y == -1)
         gd->axis.y = 0;
     return(0);
 }
@@ -125,40 +127,31 @@ void    ft_transform(t_data *gd)
     double  normalX;
     double  normalY;
     double  oldDirX;
+    double  temp;
     
     //Rotation
     oldDirX = gd->actor.dirX;
     gd->actor.dirX = gd->actor.dirX * cos(gd->axis.rot * ROTSPEED) - gd->actor.dirY * sin(gd->axis.rot * ROTSPEED);
     gd->actor.dirY = oldDirX * sin(gd->axis.rot * ROTSPEED) + gd->actor.dirY * cos(gd->axis.rot * ROTSPEED);
-    double oldPlaneX = gd->actor.planeX;
+    oldDirX = gd->actor.planeX;
     gd->actor.planeX = gd->actor.planeX * cos(gd->axis.rot * ROTSPEED) - gd->actor.planeY * sin(gd->axis.rot * ROTSPEED);
-    gd->actor.planeY = oldPlaneX * sin(gd->axis.rot * ROTSPEED) + gd->actor.planeY * cos(gd->axis.rot * ROTSPEED);
-
-    //Normal to direction
-    normalX = gd->actor.dirX * cos(90 * M_PI / 180) - gd->actor.dirY * sin(90 * M_PI / 180);
-    normalY = gd->actor.dirX * sin(90 * M_PI / 180) + gd->actor.dirY * cos(90 * M_PI / 180);
-
+    gd->actor.planeY = oldDirX * sin(gd->axis.rot * ROTSPEED) + gd->actor.planeY * cos(gd->axis.rot * ROTSPEED);
+    
     //Displacement
     if (gd->axis.x != 0 && gd->axis.y != 0)
-    {
-        normalX = sqrt(pow(gd->actor.dirX, 2) + pow(normalX, 2) + 2 * gd->actor.dirX * normalX * cos(45 * M_PI / 180));
-        normalY = sqrt(pow(gd->actor.dirY, 2) + pow(normalY, 2) + 2 * gd->actor.dirY * normalY * cos(45 * M_PI / 180));
-        if(worldMap[(int)(gd->actor.posX + normalX * MOVSPEED)][(int)gd->actor.posY] == 0)
-            gd->actor.posX = gd->actor.posX + (normalX * MOVSPEED);
-        if(worldMap[(int)gd->actor.posX][(int)(gd->actor.posY + normalY * MOVSPEED)] == 0)
-            gd->actor.posY = gd->actor.posY + (normalY * MOVSPEED);
-    }
+        temp = MOVSPEED * (sqrt(2)/ 2);
     else
-    {
-        if(worldMap[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * MOVSPEED)][(int)gd->actor.posY] == 0)
-            gd->actor.posX = gd->actor.posX + gd->axis.x * (gd->actor.dirX * MOVSPEED);
-        if(worldMap[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.x * gd->actor.dirY * MOVSPEED)] == 0)
-            gd->actor.posY = gd->actor.posY + gd->axis.x * (gd->actor.dirY * MOVSPEED);
-        if(worldMap[(int)(gd->actor.posX + gd->axis.y * normalX * MOVSPEED)][(int)gd->actor.posY] == 0)
-            gd->actor.posX = gd->actor.posX + gd->axis.y * (normalX * MOVSPEED);
-        if(worldMap[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.y * normalY * MOVSPEED)] == 0)
-            gd->actor.posY = gd->actor.posY + gd->axis.y * (normalY * MOVSPEED);
-    }
+        temp = MOVSPEED;
+    normalX = gd->actor.dirX * cos(90 * M_PI / 180) - gd->actor.dirY * sin(90 * M_PI / 180);
+    normalY = gd->actor.dirX * sin(90 * M_PI / 180) + gd->actor.dirY * cos(90 * M_PI / 180);
+    if(worldMap[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * temp)][(int)gd->actor.posY] == 0)
+        gd->actor.posX = gd->actor.posX + gd->axis.x * (gd->actor.dirX * temp);
+    if(worldMap[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.x * gd->actor.dirY * temp)] == 0)
+        gd->actor.posY = gd->actor.posY + gd->axis.x * (gd->actor.dirY * temp);
+    if(worldMap[(int)(gd->actor.posX + gd->axis.y * normalX * temp)][(int)gd->actor.posY] == 0)
+        gd->actor.posX = gd->actor.posX + gd->axis.y * (normalX * temp);
+    if(worldMap[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.y * normalY * temp)] == 0)
+        gd->actor.posY = gd->actor.posY + gd->axis.y * (normalY * temp);
 }
 
 //------------------------------------ RAYCASTING ------------------------------------//
@@ -274,8 +267,6 @@ int     update(t_data *gd)
     int x = 0;
 
     ft_transform(gd);
-    clear_screen(gd);
-
     while (x < gd->game.scrW)
     {
         ft_raycasting(gd, x);
@@ -302,6 +293,7 @@ int     main(/*int nargs, char **xargs*/)
     mlx_hook(gd.game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
     mlx_hook(gd.game.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
     mlx_hook(gd.game.win, X_EVENT_KEY_EXIT, 0, &close_game, &gd);
+
 
     //Starting update
     mlx_loop_hook(gd.game.mlx, &update, &gd);
