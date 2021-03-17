@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/15 20:37:04 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/17 20:40:57 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@
 # include <math.h>
 # include <string.h>
 
-# include "mlx/mlx.h"
-//# include "minilibx/mms/mlx.h"
-//# include "minilibx/opengl/mlx.h"
-
-//# include "libft"
+# include "srcs/mlx/mlx.h"
+# include "srcs/gnl/get_next_line.h"
+# include "srcs/libft/libft.h"
 
 # define TRUE					1
 # define FALSE					0
@@ -41,12 +39,13 @@
 # define KEY_A_LEFT	    		123
 # define KEY_A_RIGHT			124
 # define KEY_TAB				48
+# define KEY_L_SHFT				257
 
 # define COLS					24
 # define ROWS					24
 # define TILE_SIZE				50
-# define MOVSPEED               0.2
-# define ROTSPEED               0.1
+# define MOVSPEED               0.15
+# define ROTSPEED               0.075
 
 typedef struct	s_player
 {
@@ -56,6 +55,8 @@ typedef struct	s_player
 	double	dirY;
 	double	planeX;
 	double	planeY;
+	double	mvSpd;
+	double	rotSpd;
 }				t_player;
 
 typedef struct	s_controls
@@ -98,12 +99,29 @@ typedef struct	s_ray
 	int		side;
 }				t_ray;
 
+typedef struct		s_textures
+{
+	void	*img;
+	int		*addr;
+	int		width;
+	int		height;
+	int		bits;
+	int		line;
+	int		endian;
+}					t_textures;
+
 typedef struct		s_data
 {
 	t_game		game;
 	t_player	actor;
 	t_controls	axis;
+	t_textures	*txtr;
+	int			txtW;
+	int			txtH;
 }					t_data;
 
+void    ft_yaw(t_data *gd, double spd);
+void    ft_displacement(t_data *gd, double spd);
+void    ft_transform(t_data *gd);
 
 #endif

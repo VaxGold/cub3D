@@ -1,27 +1,35 @@
-SRCS    = test.c
+NAME	=	cub3D
+CFLAGS	=	-Wall -Werror -Wextra
+GNL		=	srcs/gnl/get_next_line.c
+SRCS	=	ft_transform.c cub3D.c
+OBJS	=	$(SRCS:.c=.o)
+CC		=	gcc
+MATH	=	-lm
 
-OBJS    = ${SRCS:.c=.o}
+all: $(NAME)
 
-NAME    = cub3D.a
+$(NAME): $(OBJS)
+	make -C srcs/mlx
+	make -C srcs/libft
+	cp srcs/libft/libft.a .
+	gcc $(OBJS) $(CFLAGS) -Lminilibx -lmlx -framework OpenGL -framework AppKit -L./ -lft -o $(NAME) $(MATH)
 
-CC      = gcc
-
-RM      = rm -f
-
-CFLAGS  = -Wall -Werror -Wextra
-
-.c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
-$(NAME):    ${OBJS}
-
-all:       ${NAME}
+all: $(NAME)
 
 clean:
-		${RM} ${OBJS} ${OBJS_BONUS}
+	rm -f $(OBJS)
+	make clean -C srcs/mlx
+	make clean -C srcs/libft
 
-fclean:     clean
-		${RM} ${NAME}
+fclean: clean
+	rm -f $(NAME)
+	make fclean -C srcs/libft
+	rm -f libft.a
 
-re:         fclean bonus
+re: fclean all
 
-.PHONY:	clean all fclean re
+test:
+		gcc -L mlx -lmlx -framework OpenGL -framework AppKit cubTestD.c
+		./a.out
+
+.PHONY:	all test clean fclean re
