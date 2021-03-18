@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/17 20:40:57 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/18 20:54:16 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 # include "srcs/mlx/mlx.h"
 # include "srcs/gnl/get_next_line.h"
 # include "srcs/libft/libft.h"
-
-# define TRUE					1
-# define FALSE					0
 
 # define X_EVENT_KEY_PRESS		2
 # define X_EVENT_KEY_RELEASE	3
@@ -44,7 +41,7 @@
 # define COLS					24
 # define ROWS					24
 # define TILE_SIZE				50
-# define MOVSPEED               0.15
+# define MOVSPEED               0.1
 # define ROTSPEED               0.075
 
 typedef struct	s_player
@@ -64,6 +61,7 @@ typedef struct	s_controls
 	double	x;
 	double	y;
 	double	rot;
+	int		run;
 }				t_controls;
 
 typedef struct	s_img
@@ -85,10 +83,12 @@ typedef struct	s_game
 	int		**map;
 }				t_game;
 
-typedef struct	s_ray
+typedef struct	s_raycast
 {
 	double	dirX;
 	double	dirY;
+	int		mapX;
+	int		mapY;
 	double	sideDistX;
 	double	sideDistY;
 	double	deltaDistX;
@@ -97,7 +97,20 @@ typedef struct	s_ray
 	double	stepY;
 	int		hit;
 	int		side;
-}				t_ray;
+	double	perpWallDist;
+	int		lineHeight;
+}				t_raycast;
+
+typedef struct		s_render
+{
+	int		drawStart;
+	int		drawEnd;
+	int		texNum;
+	double	wallX;
+	int		texX;
+	double	step;
+	double	texPos;
+}					t_render;
 
 typedef struct		s_textures
 {
@@ -115,7 +128,7 @@ typedef struct		s_data
 	t_game		game;
 	t_player	actor;
 	t_controls	axis;
-	t_textures	*txtr;
+	t_textures	txtr;
 	int			txtW;
 	int			txtH;
 }					t_data;
@@ -123,5 +136,10 @@ typedef struct		s_data
 void    ft_yaw(t_data *gd, double spd);
 void    ft_displacement(t_data *gd, double spd);
 void    ft_transform(t_data *gd);
+
+int     close_game(t_data *gd);
+int     key_press(int key_code, t_data *gd);
+int     key_release(int key_code, t_data *gd);
+void    key_events(t_data *gd);
 
 #endif

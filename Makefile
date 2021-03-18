@@ -1,7 +1,7 @@
 NAME	=	cub3D
 CFLAGS	=	-Wall -Werror -Wextra
 GNL		=	srcs/gnl/get_next_line.c
-SRCS	=	ft_transform.c cub3D.c
+SRCS	=	ft_transform.c ft_raycaster.c ft_controls.c
 OBJS	=	$(SRCS:.c=.o)
 CC		=	gcc
 MATH	=	-lm

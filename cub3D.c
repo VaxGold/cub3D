@@ -6,14 +6,14 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:08:06 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/17 20:41:03 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/18 20:30:49 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-//------------------------------------ START ------------------------------------//
-void     game_init(t_data *gd)
+//------------------------------------ AWAKE ------------------------------------//
+void     awake(t_data *gd)
 {
     gd->game.mlx = mlx_init();
     gd->game.win = mlx_new_window(gd->game.mlx, gd->game.scrW, gd->game.scrH, "cub3D");
@@ -24,7 +24,6 @@ void     game_init(t_data *gd)
 //------------------------------------ EXIT ------------------------------------//
 int     close_game(t_data *gd)
 {
-    free(gd->txtr.texture);
     mlx_destroy_window(gd->game.mlx, gd->game.win);
     exit(0);
 }
@@ -37,12 +36,12 @@ int     update(t_data *gd)
     ft_transform(gd);
     x = -1;
     while (++x < gd->game.scrW)
-        ft_raycasting(gd, x);
+        ft_raycaster(gd, x);
     mlx_put_image_to_window(gd->game.mlx, gd->game.win, gd->game.img.ptr, 0, 0);
     return(0);
 }
 
-//------------------------------------ AWAKE ------------------------------------//
+//------------------------------------ START ------------------------------------//
 int     main(int nargs, char **xargs)
 {
     t_data gd;
@@ -53,12 +52,10 @@ int     main(int nargs, char **xargs)
         //Player spawn
         //Texture loader
         //Game resources
-        game_init(&gd);
+        awake(&gd);
         if (nargs == 2)
         {
-            //mlx_hook(gd.game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
-            //mlx_hook(gd.game.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
-            //mlx_hook(gd.game.win, X_EVENT_KEY_EXIT, 0, &close_game, &gd);
+            key_events(&gd);
             mlx_loop_hook(gd.game.mlx, &update, &gd);
             mlx_loop(gd.game.mlx);
         }

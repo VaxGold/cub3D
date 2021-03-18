@@ -7,11 +7,11 @@ int worldMap [COLS][ROWS] =
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+	{1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
+	{1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1},
+	{1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -19,13 +19,13 @@ int worldMap [COLS][ROWS] =
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
@@ -62,20 +62,8 @@ void     game_init(t_data *gd)
 
 void    texture_generator(t_data *gd)
 {
-    gd->txtr[0].img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/0.xpm", &gd->txtW, &gd->txtH);
-    gd->txtr[0].addr = (int *)mlx_get_data_addr(gd->game.mlx, &gd->txtr[0].bits, &gd->txtr[0].line, &gd->txtr[0].endian);
-
-    gd->txtr[1].img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/1.xpm", &gd->txtW, &gd->txtH);
-    gd->txtr[1].addr = (int *)mlx_get_data_addr(gd->game.mlx, &gd->txtr[1].bits, &gd->txtr[1].line, &gd->txtr[1].endian);
-
-    gd->txtr[2].img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/2.xpm", &gd->txtW, &gd->txtH);
-    gd->txtr[2].addr = (int *)mlx_get_data_addr(gd->game.mlx, &gd->txtr[2].bits, &gd->txtr[2].line, &gd->txtr[2].endian);
-
-    gd->txtr[3].img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/3.xpm", &gd->txtW, &gd->txtH);
-    gd->txtr[3].addr = (int *)mlx_get_data_addr(gd->game.mlx, &gd->txtr[3].bits, &gd->txtr[3].line, &gd->txtr[3].endian);
-
-    gd->txtr[4].img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/1.xpm", &gd->txtW, &gd->txtH);
-    gd->txtr[4].addr = (int *)mlx_get_data_addr(gd->game.mlx, &gd->txtr[4].bits, &gd->txtr[4].line, &gd->txtr[4].endian);
+    gd->txtr.img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/bluestone.xpm", &gd->txtW, &gd->txtH);
+    gd->txtr.addr = (int *)mlx_get_data_addr(gd->txtr.img, &gd->txtr.bits, &gd->txtr.line, &gd->txtr.endian);
 }
 
 //------------------------------------ KEY INPUT ------------------------------------//
@@ -96,6 +84,8 @@ int     key_press(int key_code, t_data *gd)
         gd->axis.y = 1;
     else if (key_code == KEY_D)
         gd->axis.y = -1;
+    else if (key_code == KEY_L_SHFT)
+        gd->axis.run = 3;
     else if (key_code == KEY_TAB)
     {
         printf("---------------->| INFORMATION |<----------------\n");
@@ -119,12 +109,14 @@ int     key_release(int key_code, t_data *gd)
         gd->axis.y = 0;
     else if (key_code == KEY_D && gd->axis.y == -1)
         gd->axis.y = 0;
+    else if (key_code == KEY_L_SHFT)
+        gd->axis.run = 1;
     return(0);
 }
 
 int     close_game(t_data *gd)
 {
-    free(gd->txtr);
+    //free(gd->txtr);
     mlx_destroy_window(gd->game.mlx, gd->game.win);
     exit(0);
 }
@@ -147,9 +139,9 @@ void    ft_transforms(t_data *gd)
     
     //Displacement
     if (gd->axis.x != 0 && gd->axis.y != 0)
-        temp = MOVSPEED * (sqrt(2)/ 2);
+        temp = gd->axis.run * MOVSPEED * (sqrt(2)/ 2);
     else
-        temp = MOVSPEED;
+        temp = gd->axis.run * MOVSPEED;
     normalX = gd->actor.dirX * cos(90 * M_PI / 180) - gd->actor.dirY * sin(90 * M_PI / 180);
     normalY = gd->actor.dirX * sin(90 * M_PI / 180) + gd->actor.dirY * cos(90 * M_PI / 180);
     if(worldMap[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * temp)][(int)gd->actor.posY] == 0)
@@ -237,22 +229,22 @@ void    ft_raycasting(t_data *gd, int x)
 		if (drawEnd >= gd->game.scrH)
 			drawEnd = gd->game.scrH - 1;
 
-        int texNum = worldMap[mapX][mapY] - 1;
+        //int texNum = worldMap[mapX][mapY] - 1;
 
         //calculate value of wallX
         double wallX; //where exactly the wall was hit
         if(side == 0)
-            wallX = gd->actor.posX + perpWallDist * rayDirY;
+            wallX = gd->actor.posY + perpWallDist * rayDirY;
         else
             wallX = gd->actor.posX + perpWallDist * rayDirX;
         wallX -= floor((wallX));
 
         //x coordinate on the texture
-        int texX = (int)(wallX * (double)gd->txtH);
+        int texX = (int)(wallX * (double)gd->txtW);
         if(side == 0 && rayDirX > 0)
-            texX = gd->txtH - texX - 1;
+            texX = gd->txtW - texX - 1;
         if(side == 1 && rayDirY < 0)
-            texX = gd->txtH - texX - 1;
+            texX = gd->txtW - texX - 1;
 
         // How much to increase the texture coordinate per screen pixel
         double step = 1.0 * gd->txtH / lineHeight;
@@ -265,20 +257,21 @@ void    ft_raycasting(t_data *gd, int x)
             gd->game.img.data[pix * gd->game.scrW + x] = 0x02AFC4;
             pix++;
         }
-        int *textn = gd->txtr[texNum].addr;
-        while (drawStart < drawEnd)
+        int *textn = gd->txtr.addr;
+        pix = drawStart;
+        while (pix < drawEnd)
 		{
             // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
             int texY = (int)texPos & (gd->txtH - 1);
             //printf("TexY-->%d, texH--->%d\n", texY, gd->txtH);
             texPos += step;
-            int color = textn[gd->txtW * texY + texX];
+            int color = textn[gd->txtH * texY + texX];
             //int color = 0xFF0000;
             //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
             if(side == 1)
-                color = color / 2;
-			gd->game.img.data[drawStart * gd->game.scrW + x] = color;
-			drawStart++;
+                color = (color >> 1) & 8355711;
+			gd->game.img.data[pix * gd->game.scrW + x] = color;
+			pix++;
 		}
         while (drawEnd <= gd->game.scrH)
         {
@@ -311,14 +304,11 @@ int     main(/*int nargs, char **xargs*/)
     gd.actor.posX = 22, gd.actor.posY = 12;
 	gd.actor.dirX = -1, gd.actor.dirY = 0;
 	gd.actor.planeX = 0, gd.actor.planeY = 0.66;
-    gd.txtH = 45, gd.txtW = 45;
-
-    //Texture maker
-    gd.txtr = malloc(6 * sizeof(t_textures));
-    texture_generator(&gd);
-
+    
     //Game resources
     game_init(&gd);
+    gd.txtH = 100, gd.txtW = 100;
+    texture_generator(&gd);
 
     //Input events
     mlx_hook(gd.game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
