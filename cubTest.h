@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3D.h                                            :+:      :+:    :+:   */
+/*   cubTest.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/22 21:32:34 by omercade         ###   ########.fr       */
+/*   Created: 2021/03/20 14:29:21 by omercade          #+#    #+#             */
+/*   Updated: 2021/03/22 20:12:23 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUBTEST_H
+# define CUBTEST_H
 
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
 # include <string.h>
-#include <fcntl.h>
+
 
 # include "srcs/mlx/mlx.h"
 # include "srcs/gnl/get_next_line.h"
@@ -32,23 +32,49 @@
 # define KEY_A					0
 # define KEY_S					1
 # define KEY_D					2
+# define KEY_Q	    			12
+# define KEY_E					14
 # define KEY_A_LEFT	    		123
 # define KEY_A_RIGHT			124
 # define KEY_TAB				48
 # define KEY_L_SHFT				257
 
-# define TEX_W					100
-# define TEX_H					100
+# define COLS					24
+# define ROWS					24
+# define TILE_SIZE				50
 # define MOVSPEED               0.1
 # define ROTSPEED               0.075
 
+# define UDIV					1
+# define VDIV					1
+# define VMOVE					0.0
 
-typedef struct	s_check
+typedef struct	s_player
 {
-	int			init_m;
-	char		flag[9];
-	t_list		*first;
-}				t_check;
+	double	posX;
+	double	posY;
+	double	dirX;
+	double	dirY;
+	double	planeX;
+	double	planeY;
+	double	mvSpd;
+	double	rotSpd;
+}				t_player;
+
+typedef struct	s_sprite
+{
+	double		x;
+	double		y;
+	//int			ntex;
+}				t_sprite;
+
+typedef struct	s_controls
+{
+	double	x;
+	double	y;
+	double	rot;
+	int		spdMod;
+}				t_controls;
 
 typedef struct	s_img
 {
@@ -59,56 +85,23 @@ typedef struct	s_img
 	int			endian;
 }				t_img;
 
-typedef struct		s_texture
+typedef struct	s_game
 {
-	void	*img;
-	int		*addr;
-	int		width;
-	int		height;
-	int		bits;
-	int		line;
-	int		endian;
-}					t_texture;
-
-typedef struct	s_controls
-{
-	double	x;
-	double	y;
-	double	rot;
-	int		spdMod;//para sprint
-}				t_controls;
-
-typedef struct	s_actor
-{
-	double	posX;
-	double	posY;
-	double	dirX;
-	double	dirY;
-	double	planeX;
-	double	planeY;
-	double	mvSpd;
-	double	rotSpd;
-}				t_actor;
+	void    	*mlx;
+	void    	*win;//Borrar
+	int    		scrW;//Borrar
+	int     	scrH;//Borrar
+	t_img		img;//Borrar
+	int			**map;
+}				t_game;
 
 typedef struct		s_canvas
 {
 	t_img	img;
 	void    *win;
-	int		w;
-	int		h;
+	int		width;
+	int		height;
 }					t_canvas;
-
-
-typedef struct		s_data
-{
-	void		*mlx;
-	t_canvas	cnv;
-	t_actor		actor;
-	t_controls	axis;
-	t_texture	tex[5]; //La 5 posicion es para el sprite
-	int			color[2]; //color[1] = techo, color[2] = suelo
-	int			**map;
-}					t_data;
 
 typedef struct	s_raycast
 {
@@ -126,6 +119,7 @@ typedef struct	s_raycast
 	int		side;
 	double	perpWallDist;
 	int		lineHeight;
+    double  *zBuffer;
 }				t_raycast;
 
 typedef struct		s_render
@@ -139,20 +133,27 @@ typedef struct		s_render
 	double	texPos;
 }					t_render;
 
-int     close_window(t_data *gd);
-int     key_press(int key_code, t_data *gd);
-int     key_release(int key_code, t_data *gd);
-void    key_events(t_data *gd);
+typedef struct		s_textures
+{
+	void	*img;
+	int		*addr;
+	int		width;
+	int		height;
+	int		bits;
+	int		line;
+	int		endian;
+}					t_textures;
 
-void    ft_yaw(t_data *gd, double spd);
-void    ft_displacement(t_data *gd, double spd);
-void    ft_transform(t_data *gd);
-
-int    ft_reader(t_data *gd, char *rut);
-
-int     ft_check_map(t_data *gd, t_check *this, char *line);
-int     ft_check_tex(t_data *gd, t_check *this, char *line);
-int     ft_check_color(t_data *gd, t_check *this, char *line);
-int     ft_check_res(t_data *gd, t_check *this, char *line);
+typedef struct		s_data
+{
+	t_game		game;
+	t_player	actor;
+	t_controls	axis;
+	t_textures	txtr;
+	t_textures	stex;
+	t_sprite	spr[4];
+	int			txtW;
+	int			txtH;
+}					t_data;
 
 #endif

@@ -1,7 +1,7 @@
 NAME	=	cub3D
 CFLAGS	=	-Wall -Werror -Wextra
 GNL		=	srcs/gnl/get_next_line.c
-SRCS	=	ft_transform.c ft_raycaster.c ft_controls.c
+SRCS	=	$(GNL) cub3D.c ft_transform.c ft_raycaster.c ft_controls.c
 OBJS	=	$(SRCS:.c=.o)
 CC		=	gcc
 MATH	=	-lm
@@ -29,7 +29,7 @@ fclean: clean
 re: fclean all
 
 test:
-		gcc -L mlx -lmlx -framework OpenGL -framework AppKit cubTestD.c
+		gcc -g -L mlx -lmlx -framework OpenGL -framework AppKit cubTestD.c
 		./a.out
 
 .PHONY:	all test clean fclean re

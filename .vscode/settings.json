@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "string": "c",
-        "complex": "c"
+        "complex": "c",
+        "array": "cpp",
+        "iterator": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp"
     }
 }

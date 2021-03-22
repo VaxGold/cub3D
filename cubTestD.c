@@ -1,4 +1,4 @@
-#include "cub3D.h"
+#include "cubTest.h"
 
 //------------------------------------ MAP ------------------------------------//
 int worldMap [COLS][ROWS] =
@@ -64,6 +64,18 @@ void    texture_generator(t_data *gd)
 {
     gd->txtr.img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/bluestone.xpm", &gd->txtW, &gd->txtH);
     gd->txtr.addr = (int *)mlx_get_data_addr(gd->txtr.img, &gd->txtr.bits, &gd->txtr.line, &gd->txtr.endian);
+
+    /*gd->stex.img = mlx_xpm_file_to_image(gd->game.mlx, "srcs/imgs/pilar.xpm", &gd->txtW, &gd->txtH);
+    gd->stex.addr = (int *)mlx_get_data_addr(gd->stex.img, &gd->stex.bits, &gd->stex.line, &gd->stex.endian);
+    gd->spr[0].x = 4;
+    gd->spr[0].y = 5;
+    gd->spr[1].x = 12;
+    gd->spr[1].y = 6;
+    gd->spr[2].x = 12;
+    gd->spr[2].y = 7;
+    gd->spr[3].x = 12;
+    gd->spr[3].y = 8;*/
+    
 }
 
 //------------------------------------ KEY INPUT ------------------------------------//
@@ -85,7 +97,7 @@ int     key_press(int key_code, t_data *gd)
     else if (key_code == KEY_D)
         gd->axis.y = -1;
     else if (key_code == KEY_L_SHFT)
-        gd->axis.run = 3;
+        gd->axis.spdMod = 3;
     else if (key_code == KEY_TAB)
     {
         printf("---------------->| INFORMATION |<----------------\n");
@@ -110,7 +122,7 @@ int     key_release(int key_code, t_data *gd)
     else if (key_code == KEY_D && gd->axis.y == -1)
         gd->axis.y = 0;
     else if (key_code == KEY_L_SHFT)
-        gd->axis.run = 1;
+        gd->axis.spdMod = 1;
     return(0);
 }
 
@@ -139,9 +151,9 @@ void    ft_transforms(t_data *gd)
     
     //Displacement
     if (gd->axis.x != 0 && gd->axis.y != 0)
-        temp = gd->axis.run * MOVSPEED * (sqrt(2)/ 2);
+        temp = gd->axis.spdMod * MOVSPEED * (sqrt(2)/ 2);
     else
-        temp = gd->axis.run * MOVSPEED;
+        temp = gd->axis.spdMod * MOVSPEED;
     normalX = gd->actor.dirX * cos(90 * M_PI / 180) - gd->actor.dirY * sin(90 * M_PI / 180);
     normalY = gd->actor.dirX * sin(90 * M_PI / 180) + gd->actor.dirY * cos(90 * M_PI / 180);
     if(worldMap[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * temp)][(int)gd->actor.posY] == 0)
@@ -155,142 +167,239 @@ void    ft_transforms(t_data *gd)
 }
 
 //------------------------------------ RAYCASTING ------------------------------------//
-void    ft_raycasting(t_data *gd, int x)
+double    ft_raycasting(t_data *gd, int x)
 {
     double cameraX = 2 * x / (double) gd->game.scrW - 1;
-        double rayDirX = gd->actor.dirX + gd->actor.planeX * cameraX;
-		double rayDirY = gd->actor.dirY + gd->actor.planeY * cameraX;
+    double rayDirX = gd->actor.dirX + gd->actor.planeX * cameraX;
+	double rayDirY = gd->actor.dirY + gd->actor.planeY * cameraX;
 
-        int mapX = (int)gd->actor.posX;
-		int mapY = (int)gd->actor.posY;
+    int mapX = (int)gd->actor.posX;
+	int mapY = (int)gd->actor.posY;
 
-        double sideDistX;
-		double sideDistY;
+    double sideDistX;
+	double sideDistY;
 
-        double deltaDistX = fabs(1 / rayDirX);
-		double deltaDistY = fabs(1 / rayDirY);
-		double perpWallDist;
+    double deltaDistX = fabs(1 / rayDirX);
+	double deltaDistY = fabs(1 / rayDirY);
+	double perpWallDist;
 
-        int stepX;
-		int stepY;
-		int hit = 0;
-		int side;
+    int stepX;
+	int stepY;
+	int hit = 0;
+	int side;
 
-        if (rayDirX < 0)
-		{
-			stepX = -1;
-        	sideDistX = (gd->actor.posX - mapX) * deltaDistX;
-		}
-		else
-		{
-			stepX = 1;
-       		sideDistX = (mapX + 1.0 - gd->actor.posX) * deltaDistX;
-		}
-		if (rayDirY < 0)
-		{
-			stepY = -1;
-        	sideDistY = (gd->actor.posY - mapY) * deltaDistY;
-		}
-		else
-		{
-			stepY = 1;
-        	sideDistY = (mapY + 1.0 - gd->actor.posY) * deltaDistY;
-		}
+    if (rayDirX < 0)
+	{
+		stepX = -1;
+        sideDistX = (gd->actor.posX - mapX) * deltaDistX;
+	}
+	else
+	{
+		stepX = 1;
+       	sideDistX = (mapX + 1.0 - gd->actor.posX) * deltaDistX;
+	}
+	if (rayDirY < 0)
+	{
+		stepY = -1;
+        sideDistY = (gd->actor.posY - mapY) * deltaDistY;
+	}
+	else
+	{
+		stepY = 1;
+        sideDistY = (mapY + 1.0 - gd->actor.posY) * deltaDistY;
+	}
 
-        while (hit == 0)
-		{
-        	if(sideDistX < sideDistY)
-        	{
-        		sideDistX += deltaDistX;
-          		mapX += stepX;
-          		side = 0;
-        	}
-        	else
-        	{
-          		sideDistY += deltaDistY;
-          		mapY += stepY;
-          		side = 1;
-        	}
-        	if(worldMap[mapX][mapY] > 0)
-				hit = 1;
-		}
+    while (hit == 0)
+	{
+        if(sideDistX < sideDistY)
+        {
+        	sideDistX += deltaDistX;
+          	mapX += stepX;
+          	side = 0;
+        }
+    	else
+    	{
+        	sideDistY += deltaDistY;
+          	mapY += stepY;
+          	side = 1;
+        }
+        if(worldMap[mapX][mapY] > 0)
+			hit = 1;
+	}
 
-        if (side == 0)
-			perpWallDist = (mapX - gd->actor.posX + (1- stepX) / 2) / rayDirX;
-		else
-			perpWallDist = (mapY - gd->actor.posY + (1- stepY) / 2) / rayDirY;
+    if (side == 0)
+		perpWallDist = (mapX - gd->actor.posX + (1- stepX) / 2) / rayDirX;
+	else
+		perpWallDist = (mapY - gd->actor.posY + (1- stepY) / 2) / rayDirY;
 		
-		int lineHeight = (int) (gd->game.scrH / perpWallDist);
+	int lineHeight = (int) (gd->game.scrH / perpWallDist);
 
-		int drawStart = -lineHeight / 2 + gd->game.scrH / 2;
-		if (drawStart < 0)
-			drawStart = 0;
-		int drawEnd = lineHeight / 2 + gd->game.scrH / 2;
-		if (drawEnd >= gd->game.scrH)
-			drawEnd = gd->game.scrH - 1;
+	int drawStart = -lineHeight / 2 + gd->game.scrH / 2;
+	if (drawStart < 0)
+		drawStart = 0;
+	int drawEnd = lineHeight / 2 + gd->game.scrH / 2;
+	if (drawEnd >= gd->game.scrH)
+		drawEnd = gd->game.scrH - 1;
 
-        //int texNum = worldMap[mapX][mapY] - 1;
+    //int texNum = worldMap[mapX][mapY] - 1;
 
-        //calculate value of wallX
-        double wallX; //where exactly the wall was hit
-        if(side == 0)
-            wallX = gd->actor.posY + perpWallDist * rayDirY;
-        else
-            wallX = gd->actor.posX + perpWallDist * rayDirX;
-        wallX -= floor((wallX));
+    //calculate value of wallX
+    double wallX; //where exactly the wall was hit
+    if(side == 0)
+        wallX = gd->actor.posY + perpWallDist * rayDirY;
+    else
+        wallX = gd->actor.posX + perpWallDist * rayDirX;
+    wallX -= floor((wallX));
 
-        //x coordinate on the texture
-        int texX = (int)(wallX * (double)gd->txtW);
-        if(side == 0 && rayDirX > 0)
-            texX = gd->txtW - texX - 1;
-        if(side == 1 && rayDirY < 0)
-            texX = gd->txtW - texX - 1;
+    //x coordinate on the texture
+    int texX = (int)(wallX * (double)gd->txtW);
+    if(side == 0 && rayDirX > 0)
+        texX = gd->txtW - texX - 1;
+    if(side == 1 && rayDirY < 0)
+        texX = gd->txtW - texX - 1;
 
-        // How much to increase the texture coordinate per screen pixel
-        double step = 1.0 * gd->txtH / lineHeight;
-        // Starting texture coordinate
-        double texPos = (drawStart - gd->game.scrH / 2 + lineHeight / 2) * step;
+    // How much to increase the texture coordinate per screen pixel
+    double step = 1.0 * gd->txtH / lineHeight;
+    // Starting texture coordinate
+    double texPos = (drawStart - gd->game.scrH / 2 + lineHeight / 2) * step;
 
-        int pix = 0;
-        while (pix < drawStart)
-        {
-            gd->game.img.data[pix * gd->game.scrW + x] = 0x02AFC4;
-            pix++;
-        }
-        int *textn = gd->txtr.addr;
-        pix = drawStart;
-        while (pix < drawEnd)
+    int pix = 0;
+    while (pix < drawStart)
+    {
+        gd->game.img.data[pix * gd->game.scrW + x] = 0x02AFC4;
+        pix++;
+    }
+    int *textn = gd->txtr.addr;
+    pix = drawStart;
+    while (pix < drawEnd)
+	{
+        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+        int texY = (int)texPos & (gd->txtH - 1);
+        //printf("TexY-->%d, texH--->%d\n", texY, gd->txtH);
+        texPos += step;
+        int color = textn[gd->txtH * texY + texX];
+        //int color = 0xFF0000;
+        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        if(side == 1)
+            color = (color >> 1) & 8355711;
+		gd->game.img.data[pix * gd->game.scrW + x] = color;
+		pix++;
+	}
+    while (drawEnd <= gd->game.scrH)
+    {
+        gd->game.img.data[drawEnd * gd->game.scrW + x] = 0x386E39;
+        drawEnd++;
+    }
+    return(perpWallDist);
+}
+
+//------------------------------------ SPRITE CASTING ------------------------------------//
+void sortSprites(int *spriteOrder, double *spriteDist, int nSprites)
+{
+    int		i;
+	int		j;
+	int		a;
+	double	b;
+
+	i = 0;
+	while (i < (nSprites - 1))
+	{
+		j = 0;
+		while (j < (nSprites - 1 - i))
 		{
-            // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-            int texY = (int)texPos & (gd->txtH - 1);
-            //printf("TexY-->%d, texH--->%d\n", texY, gd->txtH);
-            texPos += step;
-            int color = textn[gd->txtH * texY + texX];
-            //int color = 0xFF0000;
-            //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-            if(side == 1)
-                color = (color >> 1) & 8355711;
-			gd->game.img.data[pix * gd->game.scrW + x] = color;
-			pix++;
+			if (spriteDist[j] < spriteDist[j + 1])
+			{
+				b = spriteDist[j + 1];
+				spriteDist[j + 1] = spriteDist[j];
+				spriteDist[j] = b;
+				a = spriteOrder[j + 1];
+				spriteOrder[j + 1] = spriteOrder[j];
+				spriteOrder[j] = a;
+			}
+			j++;
 		}
-        while (drawEnd <= gd->game.scrH)
+		i++;
+	}
+}
+
+void    ft_sprites(t_data *gd, double *zBuffer)
+{
+    int spriteOrder[4];
+    double spriteDist[4];
+    int nSprites = 4;
+    int i;
+
+    i = -1;
+    while(++i < nSprites)
+    {
+        spriteOrder[i] = i;
+        spriteDist[i] = (pow((gd->actor.posX - gd->spr[i].x), 2) + pow((gd->actor.posY - gd->spr[i].y), 2));
+    }
+    sortSprites(spriteOrder, spriteDist, nSprites);
+    i = -1;
+    while (++i < nSprites)
+    {
+        double spriteX = gd->spr[spriteOrder[i]].x - gd->actor.posX;
+        double spriteY = gd->spr[spriteOrder[i]].y - gd->actor.posY;
+        double invDet = 1.0 / (gd->actor.planeX * gd->actor.dirY - gd->actor.dirX * gd->actor.planeY);
+        double transformX = invDet * (gd->actor.dirY * spriteX - gd->actor.dirX * spriteY);
+        double transformY = invDet * (-gd->actor.planeY * spriteX + gd->actor.planeX * spriteY);
+
+        int spriteScreenX = (int)(gd->game.scrW / 2 * (1 + transformX / transformY));
+        int vMoveScreen = (int)(VMOVE / transformY);
+
+        int spriteHeight = abs((int)(gd->game.scrH / (transformY))) / VDIV;
+        int drawStartY = -spriteHeight / 2 + gd->game.scrH / 2 + vMoveScreen;
+        if (drawStartY < 0)
+            drawStartY = 0;
+        int drawEndY = -spriteHeight / 2 + gd->game.scrH / 2 + vMoveScreen;
+        if (drawEndY >= gd->game.scrH)
+        drawEndY = gd->game.scrH - 1;
+
+        int spriteWidth = abs((int)(gd->game.scrH / (transformY))) / UDIV;
+        int drawStartX = -spriteWidth / 2 + spriteScreenX;
+        if(drawStartX < 0)
+            drawStartX = 0;
+        int drawEndX = spriteWidth / 2 + spriteScreenX;
+        if(drawEndX >= gd->game.scrW)
+            drawEndX = gd->game.scrW - 1;
+
+        printf("Hola\n");
+        int stripe = drawStartX;
+        while (stripe < drawEndX)
         {
-            gd->game.img.data[drawEnd * gd->game.scrW + x] = 0x386E39;
-            drawEnd++;
+            int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * gd->txtW / spriteWidth) / 256;
+            if(transformY > 9 && stripe < gd->game.scrW && transformY < zBuffer[stripe])
+            {
+                int pix = drawStartY;
+                while (pix < drawEndY)
+                {
+                    int d = (pix - vMoveScreen) * 256 - gd->game.scrH * 128 + spriteHeight * 128;
+                    int texY = ((d * gd->txtH) / spriteHeight) / 256;
+                    int color = gd->stex.addr[gd->txtW * texY + texX];
+                    if((color & 0x00FFFFFF) != 0)
+                        gd->game.img.data[pix * gd->game.scrW + stripe] = color;
+                }
+            }
+            stripe++;
         }
+    }
 }
 
 //------------------------------------ UPDATE ------------------------------------//
 int     update(t_data *gd)
 {
     int x = 0;
+    //double zBuffer[gd->game.scrW + 1];
 
     ft_transforms(gd);
     while (x < gd->game.scrW)
     {
+        //zBuffer[x] = ft_raycasting(gd, x);
         ft_raycasting(gd, x);
         x++;
     }
+    //ft_sprites(gd, zBuffer);
     mlx_put_image_to_window(gd->game.mlx, gd->game.win, gd->game.img.ptr, 0, 0);
     return(0);
 }
@@ -304,6 +413,9 @@ int     main(/*int nargs, char **xargs*/)
     gd.actor.posX = 22, gd.actor.posY = 12;
 	gd.actor.dirX = -1, gd.actor.dirY = 0;
 	gd.actor.planeX = 0, gd.actor.planeY = 0.66;
+    gd.axis.x = 0;
+    gd.axis.y = 0;
+    gd.axis.rot = 0;
     
     //Game resources
     game_init(&gd);
