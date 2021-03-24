@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/22 21:32:34 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:44:59 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@
 # define TEX_H					100
 # define MOVSPEED               0.1
 # define ROTSPEED               0.075
+
+# define MAX_RES_W               1024
+# define MAX_RES_H               1024
 
 
 typedef struct	s_check
@@ -106,7 +109,7 @@ typedef struct		s_data
 	t_actor		actor;
 	t_controls	axis;
 	t_texture	tex[5]; //La 5 posicion es para el sprite
-	int			color[2]; //color[1] = techo, color[2] = suelo
+	int			color[2]; //color[0] = techo, color[1] = suelo
 	int			**map;
 }					t_data;
 
@@ -154,5 +157,8 @@ int     ft_check_map(t_data *gd, t_check *this, char *line);
 int     ft_check_tex(t_data *gd, t_check *this, char *line);
 int     ft_check_color(t_data *gd, t_check *this, char *line);
 int     ft_check_res(t_data *gd, t_check *this, char *line);
+
+int    check_flag(t_check *this, char c);
+int     space_skip(char *line, int i);
 
 #endif
