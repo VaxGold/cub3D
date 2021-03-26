@@ -3,23 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omercade <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:05:55 by omercade          #+#    #+#             */
-/*   Updated: 2021/01/25 19:02:06 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/26 21:40:15 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
+#include "cub3D.h"
 
-int     main(void)
+void	awake(t_data *gd)
 {
-    void    *mlx_ptr;
-	void	*win_ptr;
+	gd->mlx = mlx_init();
+	gd->cnv.win = mlx_new_window(gd->mlx, gd->cnv.w, gd->cnv.h, "cub3D");
+	gd->cnv.img.ptr = mlx_new_image(gd->mlx, gd->cnv.w, gd->cnv.h);
+	gd->cnv.img.data = (int *)mlx_get_data_addr(gd->cnv.img.ptr, &gd->cnv.img.bpp, &gd->cnv.img.size_l, &gd->cnv.img.endian);
+}
 
-    mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 500, 500, "test");
-	mlx_loop(mlx_ptr);
-	
-	return (0);
+int     main(int nargs, char **xargs)
+{
+    t_data this;
+	int		i;
+	int		j;
+
+	if (nargs == 2 || nargs == 3)
+	{
+		awake(&this);
+		if(ft_reader(&this, xargs[1]))
+		{
+			printf("Reading error...\n");
+			//exit(0);
+		}
+		if (nargs == 2)
+		{
+			i = 0;
+			printf("----------------------// MAP \\----------------------\n");
+			while(i < this.map_h)
+			{
+				j = 0;
+				while (j < this.map_w)
+				{
+					printf("%c", this.map[i][j]);
+					j++;
+				}
+				printf("\n");
+				i++;
+			}
+			printf("COLOR[0]------>0x%x, COLOR[1]------>0x%x\n", this.color[0], this.color[1]);
+			printf("RESOLUTION: %d x %d\n", this.cnv.w, this.cnv.h);
+		}
+		else if (nargs == 3 && ft_strncmp(xargs[2], "--save", ft_strlen(xargs[2])) == 0)
+		{
+			printf("CAPTURA DE PANTALLA!");
+		}
+	}
+	return(0);
 }

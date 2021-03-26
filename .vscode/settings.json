@@ -5,6 +5,7 @@
         "array": "cpp",
         "iterator": "cpp",
         "string_view": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "ios": "c"
     }
 }

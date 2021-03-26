@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/24 20:44:59 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/26 21:28:32 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 typedef struct	s_check
 {
 	int			init_m;
-	char		flag[9];
+	char		flag[9]; 
 	t_list		*first;
 }				t_check;
 
@@ -108,9 +108,11 @@ typedef struct		s_data
 	t_canvas	cnv;
 	t_actor		actor;
 	t_controls	axis;
-	t_texture	tex[5]; //La 5 posicion es para el sprite
+	t_texture	tex[5]; //La posicion [4] es para el sprite
 	int			color[2]; //color[0] = techo, color[1] = suelo
-	int			**map;
+	char		**map;
+	int			map_w;
+	int			map_h;
 }					t_data;
 
 typedef struct	s_raycast
@@ -142,6 +144,8 @@ typedef struct		s_render
 	double	texPos;
 }					t_render;
 
+int		ft_error(char *str);
+
 int     close_window(t_data *gd);
 int     key_press(int key_code, t_data *gd);
 int     key_release(int key_code, t_data *gd);
@@ -153,12 +157,13 @@ void    ft_transform(t_data *gd);
 
 int    ft_reader(t_data *gd, char *rut);
 
-int     ft_check_map(t_data *gd, t_check *this, char *line);
+int     ft_check_map(t_data *gd, t_check *this);
 int     ft_check_tex(t_data *gd, t_check *this, char *line);
 int     ft_check_color(t_data *gd, t_check *this, char *line);
 int     ft_check_res(t_data *gd, t_check *this, char *line);
 
-int    check_flag(t_check *this, char c);
+int   	check_flag(t_check *this, char c);
 int     space_skip(char *line, int i);
+int     check_all_flag(t_check this);
 
 #endif

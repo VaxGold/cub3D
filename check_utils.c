@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 17:41:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/24 20:55:17 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/26 21:27:42 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int    check_flag(t_check *this, char c)
         while (this->flag[i] != '\0')
             i++;
         this->flag[i++] = c;
-        this->flag[i] = "\0";
+        this->flag[i] = '\0';
         return(0);
     }
 }
