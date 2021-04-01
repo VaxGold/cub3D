@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:20:00 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 21:26:14 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/01 21:42:16 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,18 @@ void    player_generator(t_data *gd, int posX, int posY, char dir)
     gd->actor.planeY = oldDirX * sin(rot * M_PI / 180) + gd->actor.planeY * cos(rot * M_PI / 180);
 }
 
-int     fill_map(t_data *gd, void *ptr, int n)
+int     fill_map(t_data *gd, char *str, int n)
 {
     int     i;
     int     player;
-    char    *str;
 
-    str = (char *)ptr;
     player = 0;
     i = 0;
     while (i < gd->map_w && str[i] != 0)
     {
         if (str[i] == '0' || str[i] == '1' || str[i] == '2')
             gd->map[n][i] = str[i];
-        else if (str[1] == ' ')
+        else if (str[i] == ' ')
             gd->map[n][i] = '0';
         else if (str[i] == 'N' || str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
         {
@@ -85,7 +83,7 @@ int     ft_check_map(t_data *gd, t_check *this)
     gd->map_h = ft_lstsize(this->first);
     gd->map = malloc(sizeof(char *) * gd->map_h + 1);
     i = 0;
-    while (map_line->next != NULL)
+    while (map_line != NULL)
     {
         printf("%d.CONTENT---> %s\n", i, (char *)map_line->content);
         gd->map[i] = malloc(sizeof(char) * gd->map_w + 1);

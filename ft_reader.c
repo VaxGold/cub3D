@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:14:16 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 21:23:14 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/01 21:36:47 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void    save_map(t_data *gd, t_check *this, char *line)
     len = ft_strlen(line);
     if (this->init_m == 0)
     {
-        this->first = ft_lstnew(line);
+        this->first = ft_lstnew(ft_strdup(line));
         this->init_m = 1;
         gd->map_w = len;
     }
     else
     {
-        ft_lstadd_back(&this->first, ft_lstnew(line));
+        ft_lstadd_back(&this->first, ft_lstnew(ft_strdup(line)));
         if (len > gd->map_w)
             gd->map_w = len;
     }

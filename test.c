@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:05:55 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/31 20:17:47 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/01 21:40:54 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int     main(int nargs, char **xargs)
 			printf("\n");
 			i++;
 		}
-		printf("COLOR[0]------>0x%x, COLOR[1]------>0x%x\n", this.color[0], this.color[1]);
+		printf("COLOR[0]------>0x%x, COLOR[1]------>0x%X\n", this.color[0], this.color[1]);
 		printf("RESOLUTION: %d x %d\n", this.cnv.w, this.cnv.h);
 	}
 	else
