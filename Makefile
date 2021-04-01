@@ -39,6 +39,8 @@ fclean: clean
 
 re: fclean all
 
+re_file:	fclean file
+
 test:
 		gcc -g -L mlx -lmlx -framework OpenGL -framework AppKit cubTestD.c
 		./a.out

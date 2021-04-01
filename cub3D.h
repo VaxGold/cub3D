@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/26 21:28:32 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/01 21:17:14 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@
 # define MOVSPEED               0.1
 # define ROTSPEED               0.075
 
-# define MAX_RES_W               1024
-# define MAX_RES_H               1024
+# define MAX_RES_W               4096
+# define MAX_RES_H               2160
 
 
 typedef struct	s_check
 {
 	int			init_m;
-	char		flag[9]; 
+	char		*flag; 
 	t_list		*first;
 }				t_check;
 
@@ -78,7 +78,7 @@ typedef struct	s_controls
 	double	x;
 	double	y;
 	double	rot;
-	int		spdMod;//para sprint
+	int		spdMod;					//para sprint
 }				t_controls;
 
 typedef struct	s_actor
@@ -108,8 +108,8 @@ typedef struct		s_data
 	t_canvas	cnv;
 	t_actor		actor;
 	t_controls	axis;
-	t_texture	tex[5]; //La posicion [4] es para el sprite
-	int			color[2]; //color[0] = techo, color[1] = suelo
+	t_texture	tex[5];				//La posicion [4] es para el sprite
+	int			color[2];			//color[0] = techo, color[1] = suelo
 	char		**map;
 	int			map_w;
 	int			map_h;
@@ -162,8 +162,8 @@ int     ft_check_tex(t_data *gd, t_check *this, char *line);
 int     ft_check_color(t_data *gd, t_check *this, char *line);
 int     ft_check_res(t_data *gd, t_check *this, char *line);
 
+int		error_display(char *str);
 int   	check_flag(t_check *this, char c);
 int     space_skip(char *line, int i);
-int     check_all_flag(t_check this);
 
 #endif

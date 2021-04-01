@@ -6,63 +6,81 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:14:16 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/26 21:31:43 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/01 21:23:14 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void    save_map(t_check *this, char *line)
+void    save_map(t_data *gd, t_check *this, char *line)
 {
+    int len;
+
+    len = ft_strlen(line);
     if (this->init_m == 0)
     {
         this->first = ft_lstnew(line);
         this->init_m = 1;
+        gd->map_w = len;
     }
     else
+    {
         ft_lstadd_back(&this->first, ft_lstnew(line));
+        if (len > gd->map_w)
+            gd->map_w = len;
+    }
 }
 
 int     line_check(t_data *gd, t_check *this, char *line)
 {
-    int     control;
     int     i;
 
-    control = 0;
-    i = 0;
-    i = space_skip(line, i);
-    if((line[i] == '0' || line[i] == '1' || line[i] == '2') && this->init_m == 1 && this->init_m--)
-        ft_check_map(gd, this);
+    i = space_skip(line, 0);
+    if(!(line[i] == '0' || line[i] == '1' || line[i] == '2') && this->init_m == 1 && this->init_m--)
+    {
+        if(strlen(this->flag) == 8)
+            return(ft_check_map(gd, this));
+        else
+            return(error_display("TOO FEW ARGUMENTS PRE-MAP"));
+    }
     if (line[i] == 'R')
-        control = ft_check_res(gd, this, line);
+        return(ft_check_res(gd, this, line));
     else if(line[i] == 'N' || line[i] == 'W' || line[i] == 'E' || line[i] == 'S')
-        control = ft_check_tex(gd, this, line);
+        return(ft_check_tex(gd, this, line));
     else if(line[i] == 'F' || line[i] == 'C')
-        control = ft_check_color(gd, this, line);
+        return(ft_check_color(gd, this, line));
     else if(line[i] == '0' || line[i] == '1' || line[i] == '2')
-        save_map(this, line);
-    else if(!(!line[i] && this->init_m == 0))
-        control = 1;
-    return(control);
+        save_map(gd, this, line);
+    else if(!(!line[i] && this->init_m == 0))       //NOT RELIABLE!?
+        return(error_display("LINE READING"));
+    return(0);
 }
 
 int    ft_reader(t_data *gd, char *rut)
 {
     int		fd;
-    int     err;
+    int     ret;
 	char 	*line;
     t_check this;
 
 	fd = open(rut, O_RDONLY);
-    this.flag[0] = '\0';
-	while ((err = get_next_line(fd, &line)) == 1)
+    this.flag = ft_strdup("");
+	while ((ret = get_next_line(fd, &line)) != -1)
 	{
-		if (line_check(gd, &this, line) == 1)
-            return(1);
+		if (line_check(gd, &this, line) == -1)
+        {
+            ret = -1;
+            free(line);
+            line = NULL;
+            break;
+        }
 		free(line);
+        line = NULL;
+        if (ret == 0)
+            break;
 	}
-    err = check_all_flag(this);
-    if (err == 1)
-        return(1);
+    close(fd);
+    if (ret == -1 || strlen(this.flag) != 9)
+        return(error_display("FILE READING"));
     return(0);
 }

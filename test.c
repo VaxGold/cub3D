@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:05:55 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/26 21:40:15 by omercade         ###   ########.fr       */
+/*   Updated: 2021/03/31 20:17:47 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,36 +26,34 @@ int     main(int nargs, char **xargs)
 	int		i;
 	int		j;
 
-	if (nargs == 2 || nargs == 3)
+	if (nargs == 2)
 	{
 		awake(&this);
 		if(ft_reader(&this, xargs[1]))
 		{
-			printf("Reading error...\n");
-			//exit(0);
+			printf("EXIT!!\n");
+			exit(0);
 		}
-		if (nargs == 2)
+		i = 0;
+		printf("----------------------// MAP \\----------------------\n");
+		while(i < this.map_h)
 		{
-			i = 0;
-			printf("----------------------// MAP \\----------------------\n");
-			while(i < this.map_h)
+			j = 0;
+			while (j < this.map_w)
 			{
-				j = 0;
-				while (j < this.map_w)
-				{
-					printf("%c", this.map[i][j]);
-					j++;
-				}
-				printf("\n");
-				i++;
+				printf("%c", this.map[i][j]);
+				j++;
 			}
-			printf("COLOR[0]------>0x%x, COLOR[1]------>0x%x\n", this.color[0], this.color[1]);
-			printf("RESOLUTION: %d x %d\n", this.cnv.w, this.cnv.h);
+			printf("\n");
+			i++;
 		}
-		else if (nargs == 3 && ft_strncmp(xargs[2], "--save", ft_strlen(xargs[2])) == 0)
-		{
-			printf("CAPTURA DE PANTALLA!");
-		}
+		printf("COLOR[0]------>0x%x, COLOR[1]------>0x%x\n", this.color[0], this.color[1]);
+		printf("RESOLUTION: %d x %d\n", this.cnv.w, this.cnv.h);
+	}
+	else
+	{
+		error_display("ARGUMENTS");
+		exit(0);
 	}
 	return(0);
 }
