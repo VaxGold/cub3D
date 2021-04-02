@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:05:55 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 21:40:54 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 20:22:47 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int     main(int nargs, char **xargs)
 	if (nargs == 2)
 	{
 		awake(&this);
-		if(ft_reader(&this, xargs[1]))
+		if(ft_reader(&this, xargs[1]) == -1)
 		{
-			printf("EXIT!!\n");
+			printf("EXIT...\n");
 			exit(0);
 		}
 		i = 0;
-		printf("----------------------// MAP \\----------------------\n");
+		printf("----------------------// MAP \\\\----------------------\n");
 		while(i < this.map_h)
 		{
 			j = 0;
@@ -47,7 +47,7 @@ int     main(int nargs, char **xargs)
 			printf("\n");
 			i++;
 		}
-		printf("COLOR[0]------>0x%x, COLOR[1]------>0x%X\n", this.color[0], this.color[1]);
+		printf("COLOR[0]------>0x%X, COLOR[1]------>0x%X\n", this.color[0], this.color[1]);
 		printf("RESOLUTION: %d x %d\n", this.cnv.w, this.cnv.h);
 	}
 	else

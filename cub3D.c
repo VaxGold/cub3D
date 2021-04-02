@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:08:06 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/26 20:09:10 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 20:56:11 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int     update(t_data *gd)
 	x = -1;
 	while (++x < gd->cnv.w)
 		zBuffer[x] = ft_raycaster(gd, x);
+	printf("SPRITES...\n");
 	//ft_spritecaster();
 	mlx_put_image_to_window(gd->mlx, gd->cnv.win, gd->cnv.img.ptr, 0, 0);
 	return(0);
@@ -55,26 +56,30 @@ int     main(int nargs, char **xargs)
 {
 	t_data this;
 
-
-	if (nargs == 2 && nargs == 3)
+	if (nargs == 2 || nargs == 3)
 	{
+		printf("STARTING...\n");
 		awake(&this);
+		printf("AWAKED!\n");
 		if(ft_reader(&this, xargs[1]))
 		{
 			printf("Reading error...\n");
 			exit(0);
 		}
+		printf("FILE CHECKED!\n");
 		if (nargs == 2)
 		{
+			printf("GAME...\n");
 			key_events(&this);
 			mlx_loop_hook(this.mlx, &update, &this);
 			mlx_loop(this.mlx);
 		}
-		else if (nargs == 3 && ft_strcmp(xargs[2], "--save", ft_strlen(xargs[2])) == 0)
+		else if (nargs == 3 && ft_strncmp(xargs[2], "--save", ft_strlen(xargs[2])) == 0)
 		{
-			printf("CAPTURA DE PANTALLA!");
+			printf("SCREEN SHOOT!");
 			close_game(&this);
 		}
+		printf("EXIT!");
 	}
 	return(0);
 }

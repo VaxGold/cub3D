@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 21:17:14 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 21:09:53 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct	s_controls
 	double	x;
 	double	y;
 	double	rot;
-	int		spdMod;					//para sprint
+	int		spdMod;					//spdMod for running
 }				t_controls;
 
 typedef struct	s_actor
@@ -108,8 +108,8 @@ typedef struct		s_data
 	t_canvas	cnv;
 	t_actor		actor;
 	t_controls	axis;
-	t_texture	tex[5];				//La posicion [4] es para el sprite
-	int			color[2];			//color[0] = techo, color[1] = suelo
+	t_texture	tex[5];				//tex[4] = sprite;
+	int			color[2];			//color[0] = techo	//color[1] = suelo
 	char		**map;
 	int			map_w;
 	int			map_h;
@@ -155,7 +155,9 @@ void    ft_yaw(t_data *gd, double spd);
 void    ft_displacement(t_data *gd, double spd);
 void    ft_transform(t_data *gd);
 
-int    ft_reader(t_data *gd, char *rut);
+double	ft_raycaster(t_data *gd, int x);
+
+int		ft_reader(t_data *gd, char *rut);
 
 int     ft_check_map(t_data *gd, t_check *this);
 int     ft_check_tex(t_data *gd, t_check *this, char *line);

@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:14:16 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 21:36:47 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 21:11:18 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,21 @@ void    save_map(t_data *gd, t_check *this, char *line)
     }
 }
 
+int     verify_map(t_data *gd, t_check *this)
+{
+    if(strlen(this->flag) == 8)
+        return(ft_check_map(gd, this));
+    else
+        return(error_display("MAP FLAG"));
+}
+
 int     line_check(t_data *gd, t_check *this, char *line)
 {
     int     i;
 
     i = space_skip(line, 0);
     if(!(line[i] == '0' || line[i] == '1' || line[i] == '2') && this->init_m == 1 && this->init_m--)
-    {
-        if(strlen(this->flag) == 8)
-            return(ft_check_map(gd, this));
-        else
-            return(error_display("TOO FEW ARGUMENTS PRE-MAP"));
-    }
+        return(verify_map(gd, this));
     if (line[i] == 'R')
         return(ft_check_res(gd, this, line));
     else if(line[i] == 'N' || line[i] == 'W' || line[i] == 'E' || line[i] == 'S')
@@ -65,6 +68,7 @@ int    ft_reader(t_data *gd, char *rut)
 
 	fd = open(rut, O_RDONLY);
     this.flag = ft_strdup("");
+    this.init_m = 0;
 	while ((ret = get_next_line(fd, &line)) != -1)
 	{
 		if (line_check(gd, &this, line) == -1)
@@ -80,6 +84,8 @@ int    ft_reader(t_data *gd, char *rut)
             break;
 	}
     close(fd);
+    if(ret == 0 && this.init_m == 1)
+        ret = verify_map(gd, &this);
     if (ret == -1 || strlen(this.flag) != 9)
         return(error_display("FILE READING"));
     return(0);

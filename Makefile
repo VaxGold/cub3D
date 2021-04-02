@@ -1,8 +1,8 @@
-NAME	=	cub3D
-NAME_T	=	testMap
-CFLAGS	=	-Wall -Werror -Wextra
+NAME		=	cub3D
+NAME_T		=	testMap
+CFLAGS		=	-Wall -Werror -Wextra
 GNL			=	srcs/gnl/get_next_line.c srcs/gnl/get_next_line_utils.c 
-SRCS		=	$(GNL) cub3D.c ft_transform.c ft_raycaster.c ft_controls.c
+SRCS		=	$(GNL) cub3D.c ft_transform.c ft_raycaster.c ft_controls.c ft_reader.c ft_check_map.c ft_check_tex.c ft_check_res.c ft_check_color.c check_utils.c
 SRCS_T		=	$(GNL) test.c ft_reader.c ft_check_map.c ft_check_tex.c ft_check_res.c ft_check_color.c check_utils.c
 OBJS		=	$(SRCS:.c=.o)
 OBJS_T		=	$(SRCS_T:.c=.o)
@@ -13,7 +13,8 @@ FRAMEWORK 	= 	-L . -lmlx -lft -framework OpenGL -framework AppKit
 $(NAME): $(OBJS)
 	make -C srcs/mlx
 	make bonus -C srcs/libft
-	cp srcs/libft/libft.a .
+	mv srcs/libft/libft.a .
+	mv srcs/mlx/libmlx.a .
 	gcc $(OBJS) $(CFLAGS) -Lminilibx -lmlx -framework OpenGL -framework AppKit -L./ -lft -o $(NAME) $(MATH)
 
 $(NAME_T): $(OBJS_T)

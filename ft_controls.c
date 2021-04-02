@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 19:04:27 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/18 21:12:20 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 20:36:10 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int     close_window(t_data *gd)
 {
-    mlx_destroy_window(gd->game.mlx, gd->game.win);
+    mlx_destroy_window(gd->mlx, gd->cnv.win);
     exit(0);
 }
 
@@ -62,7 +62,7 @@ int     key_release(int key_code, t_data *gd)
 
 void    key_events(t_data *gd)
 {
-    mlx_hook(gd->game.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
-    mlx_hook(gd->game.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
-    mlx_hook(gd->game.win, X_EVENT_KEY_EXIT, 0, &close_window, &gd);
+    mlx_hook(gd->cnv.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
+    mlx_hook(gd->cnv.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
+    mlx_hook(gd->cnv.win, X_EVENT_KEY_EXIT, 0, &close_window, &gd);
 }

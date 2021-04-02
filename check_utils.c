@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 17:41:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 19:25:50 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 20:21:50 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,26 +45,3 @@ int    check_flag(t_check *this, char c)
         return(0);
     }
 }
-
-/*int     check_all_flag(t_check this)          //SUSTITUIDA POR STRLEN(T_CONTROL.FLAG) != 9
-{
-    if (!ft_strchr(this.flag, 'R'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'N'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'W'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'E'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'S'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'O'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'C'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'F'))
-        return(1);
-    else if (!ft_strchr(this.flag, 'M'))
-        return(1);
-    return (0);
-}*/

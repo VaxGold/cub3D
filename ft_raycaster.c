@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:57:48 by omercade          #+#    #+#             */
-/*   Updated: 2021/03/24 20:44:49 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/02 21:11:21 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void    raycast_hit(t_raycast *raycast, t_data *gd)
           	raycast->mapY += raycast->stepY;
           	raycast->side = 1;
         }
-        if(gd->map[raycast->mapX][raycast->mapY] > 0)
+        if(gd->map[raycast->mapX][raycast->mapY] == 1)
 			raycast->hit = 1;
 	}
     if (raycast->side == 0)
@@ -67,7 +67,7 @@ void    raycast_draw(t_raycast *raycast, t_data *gd, t_render *render, int x)
     int color;
     while (pix < render->drawStart)
     {
-        gd->cnv.img.data[pix * gd->cnv.w + x] = 0x02AFC4;
+        gd->cnv.img.data[pix * gd->cnv.w + x] = gd->color[0];
         pix++;
     }
     while (render->drawStart < render->drawEnd)
@@ -80,7 +80,7 @@ void    raycast_draw(t_raycast *raycast, t_data *gd, t_render *render, int x)
 	}
     while (render->drawEnd <= gd->cnv.h)
     {
-        gd->cnv.img.data[render->drawEnd * gd->cnv.h + x] = 0x386E39;
+        gd->cnv.img.data[render->drawEnd * gd->cnv.h + x] = gd->color[1];
         render->drawEnd++;
     }
 }
@@ -95,11 +95,14 @@ void    raycast_wall(t_raycast *raycast, t_data *gd, int x)
 	render.drawEnd = raycast->lineHeight / 2 + gd->cnv.h / 2;
 	if (render.drawEnd >= gd->cnv.h)
 		render.drawEnd = gd->cnv.h - 1;
-    render.texNum = gd->map[raycast->mapX][raycast->mapY] - 1;
+    printf("------->|{%d}[%d]{%c}|<-------\n", raycast->mapX, raycast->mapY, gd->map[raycast->mapX][raycast->mapY]);
+    render.texNum = (gd->map[raycast->mapX][raycast->mapY] - 48) - 1;
+    printf("TEST2...\n");
     if(raycast->side == 0)
         render.wallX = gd->actor.posX + raycast->perpWallDist * raycast->dirY;
     else
         render.wallX = gd->actor.posX + raycast->perpWallDist * raycast->dirX;
+    printf("TEST4...\n");
     render.wallX -= floor((render.wallX));
     render.step = 1.0 * TEX_H / raycast->lineHeight;
     render.texPos = (render.drawStart - gd->cnv.h / 2 + raycast->lineHeight / 2) * render.step;
