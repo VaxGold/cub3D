@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:11:29 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/02 21:09:53 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/07 20:33:14 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 # include <stdlib.h>
 # include <math.h>
 # include <string.h>
-#include <fcntl.h>
+# include <fcntl.h>
+# include <mlx.h>
 
-# include "srcs/mlx/mlx.h"
+//# include "srcs/mlx/mlx.h"
 # include "srcs/gnl/get_next_line.h"
 # include "srcs/libft/libft.h"
 
@@ -73,6 +74,12 @@ typedef struct		s_texture
 	int		endian;
 }					t_texture;
 
+typedef struct	s_sprites
+{
+	int		x;
+	int		y;
+}				t_sprites;
+
 typedef struct	s_controls
 {
 	double	x;
@@ -110,6 +117,8 @@ typedef struct		s_data
 	t_controls	axis;
 	t_texture	tex[5];				//tex[4] = sprite;
 	int			color[2];			//color[0] = techo	//color[1] = suelo
+	int			nSprites;
+	t_sprites	*spr;
 	char		**map;
 	int			map_w;
 	int			map_h;
@@ -129,9 +138,27 @@ typedef struct	s_raycast
 	double	stepY;
 	int		hit;
 	int		side;
+	int		face;
 	double	perpWallDist;
 	int		lineHeight;
 }				t_raycast;
+
+typedef struct	s_spritecast
+{
+	double	spriteX;
+	double	spriteY;
+	double	invDet;
+	double	transformX;
+	double	transformY;
+	int		spriteScreenX;
+	int		vMoveScreen;
+	int		spriteHeight;
+	int		spriteWidth;
+	int		drawStartY;
+	int		drawEndY;
+	int		drawStartX;
+	int		drawEndX;
+}				t_spritecast;
 
 typedef struct		s_render
 {
@@ -157,6 +184,8 @@ void    ft_transform(t_data *gd);
 
 double	ft_raycaster(t_data *gd, int x);
 
+void    ft_spritecaster(t_data *gd, double *zBuffer);
+
 int		ft_reader(t_data *gd, char *rut);
 
 int     ft_check_map(t_data *gd, t_check *this);
@@ -164,6 +193,7 @@ int     ft_check_tex(t_data *gd, t_check *this, char *line);
 int     ft_check_color(t_data *gd, t_check *this, char *line);
 int     ft_check_res(t_data *gd, t_check *this, char *line);
 
+void	face_orientation(t_data *gd, t_raycast *ryc, int side);
 int		error_display(char *str);
 int   	check_flag(t_check *this, char c);
 int     space_skip(char *line, int i);

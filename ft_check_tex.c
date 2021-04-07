@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:20:09 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 19:28:29 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/06 20:46:00 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int     set_texture(t_data *gd, char *r, char c)
 	if(c == 'N')
 		txpos = 0;
 	else if(c == 'E')
-		txpos = 1;
-	else if(c == 'W')
 		txpos = 2;
+	else if(c == 'W')
+		txpos = 1;
 	else if(c == 'O')
 		txpos = 3;
 	else if(c == 'S')

@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 19:04:27 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/02 20:36:10 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/07 18:31:55 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int     key_press(int key_code, t_data *gd)
     if (key_code == KEY_ESC)
         exit(0);
     else if (key_code == KEY_W)
-        gd->axis.x= 1;
+        gd->axis.x = 1;
     else if (key_code == KEY_S)
         gd->axis.x = -1;
     else if (key_code == KEY_A_LEFT)
@@ -46,7 +46,7 @@ int     key_press(int key_code, t_data *gd)
 int     key_release(int key_code, t_data *gd)
 {
     if (key_code == KEY_W && gd->axis.x == 1)
-        gd->axis.x= 0;
+        gd->axis.x = 0;
     else if (key_code == KEY_S && gd->axis.x == -1)
         gd->axis.x = 0;
     else if (key_code == KEY_A_LEFT && gd->axis.rot == 1)
@@ -58,11 +58,4 @@ int     key_release(int key_code, t_data *gd)
     else if (key_code == KEY_D && gd->axis.y == -1)
         gd->axis.y = 0;
     return(0);
-}
-
-void    key_events(t_data *gd)
-{
-    mlx_hook(gd->cnv.win, X_EVENT_KEY_PRESS, 0, &key_press, &gd);
-    mlx_hook(gd->cnv.win, X_EVENT_KEY_RELEASE, 0, &key_release, &gd);
-    mlx_hook(gd->cnv.win, X_EVENT_KEY_EXIT, 0, &close_window, &gd);
 }

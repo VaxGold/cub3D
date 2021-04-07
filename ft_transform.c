@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 18:17:01 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/01 20:38:15 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/07 20:29:30 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void    ft_displacement(t_data *gd, double spd)
 
     normalX = gd->actor.dirX * cos(90 * M_PI / 180) - gd->actor.dirY * sin(90 * M_PI / 180);;
     normalY = gd->actor.dirX * sin(90 * M_PI / 180) + gd->actor.dirY * cos(90 * M_PI / 180);
-    if(gd->map[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * spd)][(int)gd->actor.posY] == 0)
+    if(gd->map[(int)(gd->actor.posX + gd->axis.x * gd->actor.dirX * spd)][(int)gd->actor.posY] == '0')
         gd->actor.posX = gd->actor.posX + gd->axis.x * (gd->actor.dirX * spd);
-    if(gd->map[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.x * gd->actor.dirY * spd)] == 0)
+    if(gd->map[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.x * gd->actor.dirY * spd)] == '0')
         gd->actor.posY = gd->actor.posY + gd->axis.x * (gd->actor.dirY * spd);
-    if(gd->map[(int)(gd->actor.posX + gd->axis.y * normalX * spd)][(int)gd->actor.posY] == 0)
+    if(gd->map[(int)(gd->actor.posX + gd->axis.y * normalX * spd)][(int)gd->actor.posY] == '0')
         gd->actor.posX = gd->actor.posX + gd->axis.y * (normalX * spd);
-    if(gd->map[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.y * normalY * spd)] == 0)
+    if(gd->map[(int)gd->actor.posX][(int)(gd->actor.posY + gd->axis.y * normalY * spd)] == '0')
         gd->actor.posY = gd->actor.posY + gd->axis.y * (normalY * spd);
 }
 

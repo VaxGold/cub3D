@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:14:16 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/02 21:11:18 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/05 21:54:19 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int     line_check(t_data *gd, t_check *this, char *line)
     int     i;
 
     i = space_skip(line, 0);
-    if(!(line[i] == '0' || line[i] == '1' || line[i] == '2') && this->init_m == 1 && this->init_m--)
+    if(!(line[i] == '0' || line[i] == '1' || line[i] == '2' || line[i] == '\n') && this->init_m == 1 && this->init_m--)
         return(verify_map(gd, this));
     if (line[i] == 'R')
         return(ft_check_res(gd, this, line));

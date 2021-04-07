@@ -6,7 +6,7 @@
 /*   By: omercade <omercade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 21:20:00 by omercade          #+#    #+#             */
-/*   Updated: 2021/04/02 20:21:51 by omercade         ###   ########.fr       */
+/*   Updated: 2021/04/07 20:18:32 by omercade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void    player_generator(t_data *gd, int posX, int posY, char dir)
 	double oldDirX;
 
 	rot = 0;
-	gd->actor.posX = (double)posX;
-	gd->actor.posY = (double)posY;
+	gd->actor.posX = (double)posX + 0.5;
+	gd->actor.posY = (double)posY + 0.5;
 	gd->map[posX][posY] = '0';
 	if (dir == 'S')
 		rot = 180;
@@ -43,7 +43,11 @@ int     fill_map(t_data *gd, char *str, int n)
 	while (i < gd->map_w && str[i] != 0)
 	{
 		if (str[i] == '0' || str[i] == '1' || str[i] == '2')
+		{
 			gd->map[n][i] = str[i];
+			if (str[i] == '2')
+				gd->nSprites++;
+		}
 		else if (str[i] == ' ')
 			gd->map[n][i] = '0';
 		else if (str[i] == 'N' || str[i] == 'S' || str[i] == 'E' || str[i] == 'W')
