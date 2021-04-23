@@ -1,0 +1,35 @@
+R 1920 1080
+NO ./srcs/imgs/mossy.xpm
+
+
+
+
+
+
+
+
+
+SO ./srcs/imgs/greystone.xpm
+WE ./srcs/imgs/colorstone.xpm
+
+
+
+EA ./srcs/imgs/purplestone.xpm
+S ./srcs/imgs/pilar.xpm
+
+
+
+F 150,10,200
+C 3,100,180
+
+1111101
+1000001         1111
+1000001         1101
+1111111         1111
+
+11111111
+11111
+10001
+1N001
+11112
+

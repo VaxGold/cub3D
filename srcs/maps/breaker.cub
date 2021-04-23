@@ -1,0 +1,15 @@
+R 99999 99999
+NO ./srcs/imgs/mossy.xpm
+SO ./srcs/imgs/greystone.xpm
+WE ./srcs/imgs/colorstone.xpm
+EA ./srcs/imgs/purplestone.xpm
+S ./srcs/imgs/pilar.xpm
+F 150,10,200
+C 155,100,180
+
+111111111111
+120000000001
+100002222001
+110000000001 
+1100000N0001
+211111111111
